@@ -9,9 +9,10 @@ function Library:CreateWindow()
 
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "UiOwner"
-    ScreenGui.Parent = player:WaitForChild("PlayerGui")
     ScreenGui.IgnoreGuiInset = true
-    Window.Gui.ResetOnSpawn = false
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.Parent = player:WaitForChild("PlayerGui")
+
 
     --// WATERMARK (Dynamic Island Style)
 
