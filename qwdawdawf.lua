@@ -14,9 +14,7 @@ function Library:CreateWindow()
     ScreenGui.Name = "UiOwner"
     ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
-    --================================================--
-    --                    WATERMARK                  --
-    --================================================--
+    --================ WATERMARK =================--
 
     local Watermark = Instance.new("Frame")
     Watermark.Size = UDim2.new(0.28, 0, 0.055, 0)
@@ -30,7 +28,6 @@ function Library:CreateWindow()
 
     local WMStroke = Instance.new("UIStroke")
     WMStroke.Color = Color3.fromRGB(255,255,255)
-    WMStroke.Thickness = 1
     WMStroke.Transparency = 0.6
     WMStroke.Parent = Watermark
 
@@ -43,15 +40,6 @@ function Library:CreateWindow()
     WMText.TextColor3 = Color3.fromRGB(255,255,255)
     WMText.Parent = Watermark
 
-    -- Watermark animation
-    Watermark.Size = UDim2.new(0,0,0.055,0)
-    TweenService:Create(
-        Watermark,
-        TweenInfo.new(0.4,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
-        {Size = UDim2.new(0.28,0,0.055,0)}
-    ):Play()
-
-    -- FPS + Ping
     local fps = 0
     local frames = 0
     local last = tick()
@@ -68,9 +56,7 @@ function Library:CreateWindow()
         WMText.Text = "Name: "..player.Name.." | FPS: "..fps.." | Ping: "..ping.."ms"
     end)
 
-    --================================================--
-    --                     WINDOW                    --
-    --================================================--
+    --================ WINDOW =================--
 
     local Window = Instance.new("Frame")
     Window.Size = UDim2.new(0.74, 0, 0.674, 0)
@@ -82,7 +68,6 @@ function Library:CreateWindow()
 
     Instance.new("UICorner", Window).CornerRadius = UDim.new(0,20)
 
-    -- RightCtrl open
     local Opened = false
 
     UIS.InputBegan:Connect(function(input,gp)
@@ -93,26 +78,23 @@ function Library:CreateWindow()
             if Opened then
                 Window.Visible = true
                 Window.Size = UDim2.new(0,0,0,0)
-
                 TweenService:Create(Window,
-                    TweenInfo.new(0.25,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+                    TweenInfo.new(0.25,Enum.EasingStyle.Quad),
                     {Size = UDim2.new(0.74,0,0.674,0)}
                 ):Play()
             else
-                local tween = TweenService:Create(Window,
+                local t = TweenService:Create(Window,
                     TweenInfo.new(0.2),
                     {Size = UDim2.new(0,0,0,0)}
                 )
-                tween:Play()
-                tween.Completed:Wait()
+                t:Play()
+                t.Completed:Wait()
                 Window.Visible = false
             end
         end
     end)
 
-    --================================================--
-    --                TITLE / TABS / CONTENT         --
-    --================================================--
+    --================ TITLE =================--
 
     local title = Instance.new("Frame")
     title.Size = UDim2.new(0.234, 0, 0.166, 0)
@@ -148,6 +130,8 @@ function Library:CreateWindow()
     VersionText.TextColor3 = Color3.fromRGB(0,0,0)
     VersionText.Parent = title
 
+    --================ TABS =================--
+
     local Tabs = Instance.new("Frame")
     Tabs.Size = UDim2.new(0.234, 0, 0.774, 0)
     Tabs.Position = UDim2.new(0, 0, 0.199, 0)
@@ -168,7 +152,11 @@ function Library:CreateWindow()
     TabsHolder.BackgroundTransparency = 1
     TabsHolder.Parent = Tabs
 
-    Instance.new("UIListLayout",TabsHolder).Padding = UDim.new(0,8)
+    local TabsLayout = Instance.new("UIListLayout")
+    TabsLayout.Padding = UDim.new(0,8)
+    TabsLayout.Parent = TabsHolder
+
+    --================ CONTENT =================--
 
     local TabConteiner = Instance.new("Frame")
     TabConteiner.Size = UDim2.new(0.732,0,0.955,0)
@@ -184,7 +172,47 @@ function Library:CreateWindow()
     Stroke3.Thickness = 1.5
     Stroke3.Parent = TabConteiner
 
-    return {}
+    local WindowFunctions = {}
+    local FirstTab = true
+
+    function WindowFunctions:CreateTab(name)
+
+        local TabButton = Instance.new("TextButton")
+        TabButton.Size = UDim2.new(1,0,0.158,0)
+        TabButton.BackgroundColor3 = Color3.fromRGB(255,255,255)
+        TabButton.BackgroundTransparency = 0.3
+        TabButton.Text = name
+        TabButton.TextScaled = true
+        TabButton.Font = Enum.Font.GothamBold
+        TabButton.TextColor3 = Color3.fromRGB(0,0,0)
+        TabButton.Parent = TabsHolder
+
+        Instance.new("UICorner",TabButton).CornerRadius = UDim.new(0,8)
+
+        local Page = Instance.new("Frame")
+        Page.Size = UDim2.new(1,0,1,0)
+        Page.BackgroundTransparency = 1
+        Page.Visible = false
+        Page.Parent = TabConteiner
+
+        if FirstTab then
+            Page.Visible = true
+            FirstTab = false
+        end
+
+        TabButton.MouseButton1Click:Connect(function()
+            for _,v in pairs(TabConteiner:GetChildren()) do
+                if v:IsA("Frame") then
+                    v.Visible = false
+                end
+            end
+            Page.Visible = true
+        end)
+
+        return {}
+    end
+
+    return WindowFunctions
 end
 
 return Library
