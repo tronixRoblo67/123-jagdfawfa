@@ -11,6 +11,7 @@ function Library:CreateWindow()
     ScreenGui.Name = "UiOwner"
     ScreenGui.Parent = player:WaitForChild("PlayerGui")
     ScreenGui.IgnoreGuiInset = true
+    Window.Gui.ResetOnSpawn = false
 
     --// WATERMARK (Dynamic Island Style)
 
