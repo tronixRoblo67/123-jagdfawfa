@@ -19,7 +19,7 @@ local Stats = game:GetService("Stats")
 
 local Watermark = Instance.new("Frame")
 Watermark.Size = UDim2.new(0, 220, 0, 36)
-Watermark.Position = UDim2.new(0.5, 0, 0, 8)
+Watermark.Position = UDim2.new(0.5, 0, 0, 0)
 Watermark.AnchorPoint = Vector2.new(0.5, 0)
 Watermark.BackgroundColor3 = Color3.fromRGB(255,255,255)
 Watermark.BackgroundTransparency = 0.25
